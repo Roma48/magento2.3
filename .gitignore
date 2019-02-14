@@ -48,6 +48,8 @@ atlassian*
 
 /dev/*.*
 
+/generated
+
 /lib
 
 /pub
