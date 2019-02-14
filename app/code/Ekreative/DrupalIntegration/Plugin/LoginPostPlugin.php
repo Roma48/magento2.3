@@ -8,13 +8,33 @@
 
 namespace Ekreative\DrupalIntegration\Plugin;
 
+use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Class LoginPostPlugin
+ *
+ * @package Ekreative\DrupalIntegration\Plugin
+ */
 class LoginPostPlugin {
   /**
-   * Change redirect after login to home instead of dashboard.
+   * @var \Magento\Framework\ObjectManagerInterface
+   */
+  private $objectManager;
+
+  /**
+   * LoginPostPlugin constructor.
    *
+   * @param \Magento\Framework\ObjectManagerInterface $objectManager
+   */
+  public function __construct(ObjectManagerInterface $objectManager) {
+    $this->objectManager = $objectManager;
+  }
+
+  /**
    * @param \Magento\Customer\Controller\Account\LoginPost $subject
-   * @param \Magento\Framework\Controller\Result\Redirect $result
+   * @param $result
+   *
+   * @return mixed
    */
   public function afterExecute(
     \Magento\Customer\Controller\Account\LoginPost $subject,
@@ -22,8 +42,16 @@ class LoginPostPlugin {
   {
     $destination = $subject->getRequest()->getParam('destination');
     if ($destination) {
-      $result->setPath($destination); // Change this to what you want
+      $result->setPath($destination);
     }
+
+    /** @var \Magento\Customer\Model\Session $customerSession */
+    $customerSession = $this->objectManager->get('\Magento\Customer\Model\Session');
+    /** @var \Magento\Customer\Model\Customer $customer */
+    $customer = $customerSession->getCustomer();
+
+    $this->objectManager->get('\Ekreative\DrupalIntegration\Cookie\Customer')
+      ->set($customer->getId());
 
     return $result;
   }
