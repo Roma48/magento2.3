@@ -9,8 +9,6 @@
 namespace Ekreative\DrupalIntegration\Model;
 
 use Ekreative\DrupalIntegration\Api\CustomerCartInterface;
-use Magento\Checkout\Model\Session;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
@@ -54,7 +52,7 @@ class CustomerCart implements CustomerCartInterface {
     $response = [];
     /** @var \Magento\Quote\Model\Quote\Item $item */
     foreach ($items as $item) {
-      $response['cart'][] = [
+      $response['response']['cart_items'][] = [
         'product_id' => $item->getProduct()->getId()
       ];
     }
