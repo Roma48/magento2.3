@@ -53,7 +53,9 @@ class CustomerCart implements CustomerCartInterface {
     /** @var \Magento\Quote\Model\Quote\Item $item */
     foreach ($items as $item) {
       $response['response']['cart_items'][] = [
-        'product_id' => $item->getProduct()->getId()
+        'product_id' => $item->getProduct()->getId(),
+        'title' => $item->getProduct()->getName(),
+        'qty' => $item->getQty()
       ];
     }
 
